@@ -2,7 +2,8 @@ from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.template import RequestContext
+from django.shortcuts import render, redirect, render_to_response
 
 User = get_user_model()
 @login_required(login_url='/log_in/')
@@ -12,6 +13,13 @@ def user_list(request):
         user.status = 'Online' if hasattr(user, 'logged_in_user') else 'Offline'
     return render(request, 'app/user_list.html', {'users': users})
 # Create your views here.
+data = [['100',10],['90',9],['80',8]]
+def graph(request):
+    return render(request,'app/graph.html',{
+                                            'data': data,
+                                            },
+                                            )
+
 def log_in(request):
     form = AuthenticationForm()
     if request.method == 'POST':
